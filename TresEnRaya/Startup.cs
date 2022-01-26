@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using TresEnRaya.Data;
+using TresEnRaya.Hubs;
 
 namespace TresEnRaya
 {
@@ -24,6 +26,9 @@ namespace TresEnRaya
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
+            services.AddSingleton<GameService>();
+            services.AddSingleton<GameHub>();
+            services.AddSignalR();
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -45,6 +50,7 @@ namespace TresEnRaya
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapBlazorHub();
+                endpoints.MapHub<GameHub>("/gameHub");
                 endpoints.MapFallbackToPage("/_Host");
             });
         }
