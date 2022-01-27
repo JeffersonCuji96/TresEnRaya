@@ -1,36 +1,114 @@
 ﻿@page "/"
 
+@using Data;
+@using Microsoft.AspNetCore.SignalR.Client;
+@using Hubs;
+
+@inject NavigationManager NavigationManager
+@inject GameService GameService
+@inject GameHub GameHub
+@inject IJSRuntime JSRuntime
+
 <h3>Tres en Raya</h3>
 <hr />
 
 <div class="container">
     <div class="row">
-        <div class="alert alert-light" role="alert">Turno del Jugador 1</div>
-        <div class="alert alert-light" role="alert">Turno del Jugador 2</div>
+        @if (_game.Jugador1Turno)
+        {
+            <div class="alert alert-light" role="alert">Turno del Jugador 1</div>
+        }
+        @if (_game.Jugador2Turno)
+        {
+            <div class="alert alert-light" role="alert">Turno del Jugador 2</div>
+        }
     </div>
     <div class="row message-win">
-        <div class="alert message-game" role="alert">Jugador 1 Ganador</div>
-        <div class="alert message-game" role="alert">Jugador 2 Ganador!</div>
-        <div class="alert message-game" role="alert">Empate</div>
+        @if (_game.XGanador)
+        {
+            <div class="alert message-game" role="alert">Jugador 1 Ganador</div>
+        }
+        @if (_game.OGanador)
+        {
+            <div class="alert message-game" role="alert">Jugador 2 Ganador</div>
+        }
+        @if (_game.EmpateJuego)
+        {
+            <div class="alert message-game" role="alert">Empate</div>
+        }
     </div>
     <div>
         <div class="row first-row">
-            <button class="btn btn-outline-warning btn-size btn-font"></button>
-            <button class="btn btn-outline-warning btn-size btn-font"></button>
-            <button class="btn btn-outline-warning btn-size btn-font"></button>
+            <button class="btn btn-outline-warning btn-size btn-font" @onclick="(() => JuegoClick(0))">@_game.Juego[0]</button>
+            <button class="btn btn-outline-warning btn-size btn-font" @onclick="(() => JuegoClick(1))">@_game.Juego[1]</button>
+            <button class="btn btn-outline-warning btn-size btn-font" @onclick="(() => JuegoClick(2))">@_game.Juego[2]</button>
         </div>
         <div class="row">
-            <button class="btn btn-outline-warning btn-size btn-font"></button>
-            <button class="btn btn-outline-warning btn-size btn-font"></button>
-            <button class="btn btn-outline-warning btn-size btn-font"></button>
+            <button class="btn btn-outline-warning btn-size btn-font" @onclick="(() => JuegoClick(3))">@_game.Juego[3]</button>
+            <button class="btn btn-outline-warning btn-size btn-font" @onclick="(() => JuegoClick(4))">@_game.Juego[4]</button>
+            <button class="btn btn-outline-warning btn-size btn-font" @onclick="(() => JuegoClick(5))">@_game.Juego[5]</button>
         </div>
         <div class="row">
-            <button class="btn btn-outline-warning btn-size btn-font"></button>
-            <button class="btn btn-outline-warning btn-size btn-font"></button>
-            <button class="btn btn-outline-warning btn-size btn-font"></button>
+            <button class="btn btn-outline-warning btn-size btn-font" @onclick="(() => JuegoClick(6))">@_game.Juego[6]</button>
+            <button class="btn btn-outline-warning btn-size btn-font" @onclick="(() => JuegoClick(7))">@_game.Juego[7]</button>
+            <button class="btn btn-outline-warning btn-size btn-font" @onclick="(() => JuegoClick(8))">@_game.Juego[8]</button>
         </div>
     </div><br />
     <div class="row centered">
-        <button class="btn btn-info m-1">Nuevo juego</button>
+        <button class="btn btn-info m-1" @onclick="NuevoJuego">Nuevo juego</button>
     </div>
 </div>
+
+@code {
+
+    private HubConnection _hubConnection;
+    private Game _game;
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        _hubConnection = new HubConnectionBuilder().WithUrl(NavigationManager.ToAbsoluteUri("/gameHub")).Build();
+        _game = await GameService.EstablecerTableroJuego();
+
+        _hubConnection.On<Game>(HubMessages.RecibeMensaje, (game) =>
+        {
+            _game = game;
+            StateHasChanged();
+        });
+
+        _hubConnection.On<Game>(HubMessages.TurnoFinalizado, (game) =>
+        {
+            if (!game.JuegoFinalizado)
+            {
+                _game = game;
+                StateHasChanged();
+            }
+        });
+
+        _hubConnection.On<Game>(HubMessages.NuevoJuego, (game) =>
+        {
+            _game = game;
+            StateHasChanged();
+        });
+
+        _hubConnection.On<Game>(HubMessages.JuegoFinalizado, (game) =>
+        {
+            _game = game;
+            StateHasChanged();
+        });
+
+        await _hubConnection.StartAsync();
+    }
+
+    public async Task JuegoClick(int i)
+    {
+        if (!_game.JuegoFinalizado && string.IsNullOrEmpty(_game.Juego[i]))
+        {
+            await TomarTurnoJugador(i);
+        }
+    }
+
+    Task NuevoJuego() => _hubConnection.SendAsync(HubMessages.NuevoJuego, _game);
+    Task TomarTurnoJugador(int i) => _hubConnection.SendAsync(HubMessages.TomarTurnoJugador, i, _game);
+    Task Enviar() => _hubConnection.SendAsync(HubMessages.EnvioMensaje, _game);
+}
