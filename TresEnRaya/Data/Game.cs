@@ -2,7 +2,6 @@
 {
     public class Game
     {
-        public int TurnoJugador { get; set; }
         public string[] Juego { get; set; }
         public bool Jugador1Turno { get; set; }
         public bool Jugador2Turno { get; set; }

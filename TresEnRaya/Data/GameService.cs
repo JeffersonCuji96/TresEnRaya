@@ -11,7 +11,6 @@ namespace TresEnRaya.Data
         {
             var objGameModel = new Game()
             {
-                TurnoJugador = 0,
                 Juego = new string[9],
                 Jugador1Turno = false,
                 Jugador2Turno = false,

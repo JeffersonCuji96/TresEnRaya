@@ -52,7 +52,6 @@ namespace TresEnRaya.Hubs
             await GestionarJuegoFinalizado(game);
             if (!game.JuegoFinalizado)
             {
-                game.TurnoJugador++;
                 game.Jugador1Turno = !game.Jugador1Turno;
                 game.Jugador2Turno = !game.Jugador2Turno;
                 await Clients.All.SendAsync(HubMessages.TurnoFinalizado, game);

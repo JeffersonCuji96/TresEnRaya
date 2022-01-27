@@ -181,3 +181,38 @@ app {
         display: block;
     }
 }
+
+/*ESTILOS DEL INDEX*/
+
+.btn-font {
+    font-size: 60px;
+}
+
+.btn-size {
+    height: 100px;
+    width: 100px;
+    margin: 5px;
+}
+
+.btn:focus {
+    outline: none;
+}
+
+.first-row {
+    padding-top: 10px;
+}
+
+.message-game {
+    background-color: #32b1c8;
+    color: white;
+}
+
+.message-win {
+    margin-top: 1%;
+}
+
+.centered {
+    display: flex;
+    align-items: center;
+    justify-content: center
+}
