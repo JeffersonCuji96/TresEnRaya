@@ -17,21 +17,23 @@ namespace TresEnRaya.Hubs
         public async Task NuevoJuego(Game game)
         {
             game = await _service.EstablecerTableroJuego();
+            await Clients.All.SendAsync(HubMessages.DeshabilitarTablero, false);
             await Clients.All.SendAsync(HubMessages.NuevoJuego, game);
         }
         public async Task EnvioMensaje(Game game)
         {
             await Clients.All.SendAsync(HubMessages.RecibeMensaje,game);
         }
-
         public async Task GestionarJuegoFinalizado(Game game)
         {
-            if (game.Juego.GanadorX())
+            if (game.Juego.GanadorX().Item1)
             {
+                game.Linea[game.Juego.GanadorX().Item2] = false;
                 game.XGanador = true;
                 game.JuegoFinalizado = true;
-            }else if (game.Juego.GanadorO())
+            }else if (game.Juego.GanadorO().Item1)
             {
+                game.Linea[game.Juego.GanadorO().Item2] = false;
                 game.OGanador = true;
                 game.JuegoFinalizado = true;
             }else if (game.Juego.Empatado())
@@ -43,6 +45,7 @@ namespace TresEnRaya.Hubs
             {
                 game.Jugador1Turno = false;
                 game.Jugador2Turno = false;
+                await Clients.All.SendAsync(HubMessages.DeshabilitarTablero, false);
                 await Clients.All.SendAsync(HubMessages.JuegoFinalizado, game);
             }
         }
@@ -62,10 +65,14 @@ namespace TresEnRaya.Hubs
             if (game.Jugador1Turno)
             {
                 game.Juego[i] = X;
+                await Clients.Caller.SendAsync(HubMessages.DeshabilitarTablero, true);
+                await Clients.Others.SendAsync(HubMessages.DeshabilitarTablero, false);
             }
             else if(game.Jugador2Turno)
             {
                 game.Juego[i] = O;
+                await Clients.Caller.SendAsync(HubMessages.DeshabilitarTablero, true);
+                await Clients.Others.SendAsync(HubMessages.DeshabilitarTablero, false);
             }
             await FinalizarTurnoJugador(game);
         }

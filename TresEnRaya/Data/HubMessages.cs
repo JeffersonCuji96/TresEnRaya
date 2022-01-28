@@ -8,5 +8,6 @@
         public const string JuegoFinalizado = "JuegoFinalizado";
         public const string TomarTurnoJugador = "TomarTurnoJugador";
         public const string EnvioMensaje = "EnvioMensaje";
+        public const string DeshabilitarTablero = "DeshabilitarTablero";
     }
 }

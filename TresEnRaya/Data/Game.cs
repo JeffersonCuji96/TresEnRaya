@@ -9,5 +9,6 @@
         public bool OGanador { get; set; }
         public bool EmpateJuego { get; set; }
         public bool JuegoFinalizado { get; set; }
+        public bool[] Linea { get; set; }
     }
 }

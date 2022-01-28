@@ -37,23 +37,31 @@
             <div class="alert message-game" role="alert">Empate</div>
         }
     </div>
-    <div>
+    <div class="box">
+        <div class="win1 @(_game.Linea[0]? "d-none" : "d-show")"><input class="line" /></div>
+        <div class="win2 @(_game.Linea[1]? "d-none" : "d-show")"><input class="line" /></div>
+        <div class="win3 @(_game.Linea[2]? "d-none" : "d-show")"><input class="line" /></div>
+        <div class="win4 @(_game.Linea[3]? "d-none" : "d-show")"><input class="line" /></div>
+        <div class="win5 @(_game.Linea[4]? "d-none" : "d-show")"><input class="line" /></div>
+        <div class="win6 @(_game.Linea[5]? "d-none" : "d-show")"><input class="line" /></div>
+        <div class="win7 @(_game.Linea[6]? "d-none" : "d-show")"><input class="line" /></div>
+        <div class="win8 @(_game.Linea[7]? "d-none" : "d-show")"><input class="line" /></div>
         <div class="row first-row">
-            <button class="btn btn-outline-warning btn-size btn-font" @onclick="(() => JuegoClick(0))">@_game.Juego[0]</button>
-            <button class="btn btn-outline-warning btn-size btn-font" @onclick="(() => JuegoClick(1))">@_game.Juego[1]</button>
-            <button class="btn btn-outline-warning btn-size btn-font" @onclick="(() => JuegoClick(2))">@_game.Juego[2]</button>
+            <button class="btn btn-outline-warning btn-size btn-font" disabled="@_isDisabled" @onclick="(() => JuegoClick(0))">@_game.Juego[0]</button>
+            <button class="btn btn-outline-warning btn-size btn-font" disabled="@_isDisabled" @onclick="(() => JuegoClick(1))">@_game.Juego[1]</button>
+            <button class="btn btn-outline-warning btn-size btn-font" disabled="@_isDisabled" @onclick="(() => JuegoClick(2))">@_game.Juego[2]</button>
         </div>
         <div class="row">
-            <button class="btn btn-outline-warning btn-size btn-font" @onclick="(() => JuegoClick(3))">@_game.Juego[3]</button>
-            <button class="btn btn-outline-warning btn-size btn-font" @onclick="(() => JuegoClick(4))">@_game.Juego[4]</button>
-            <button class="btn btn-outline-warning btn-size btn-font" @onclick="(() => JuegoClick(5))">@_game.Juego[5]</button>
+            <button class="btn btn-outline-warning btn-size btn-font" disabled="@_isDisabled" @onclick="(() => JuegoClick(3))">@_game.Juego[3]</button>
+            <button class="btn btn-outline-warning btn-size btn-font" disabled="@_isDisabled" @onclick="(() => JuegoClick(4))">@_game.Juego[4]</button>
+            <button class="btn btn-outline-warning btn-size btn-font" disabled="@_isDisabled" @onclick="(() => JuegoClick(5))">@_game.Juego[5]</button>
         </div>
         <div class="row">
-            <button class="btn btn-outline-warning btn-size btn-font" @onclick="(() => JuegoClick(6))">@_game.Juego[6]</button>
-            <button class="btn btn-outline-warning btn-size btn-font" @onclick="(() => JuegoClick(7))">@_game.Juego[7]</button>
-            <button class="btn btn-outline-warning btn-size btn-font" @onclick="(() => JuegoClick(8))">@_game.Juego[8]</button>
+            <button class="btn btn-outline-warning btn-size btn-font" disabled="@_isDisabled" @onclick="(() => JuegoClick(6))">@_game.Juego[6]</button>
+            <button class="btn btn-outline-warning btn-size btn-font" disabled="@_isDisabled" @onclick="(() => JuegoClick(7))">@_game.Juego[7]</button>
+            <button class="btn btn-outline-warning btn-size btn-font" disabled="@_isDisabled" @onclick="(() => JuegoClick(8))">@_game.Juego[8]</button>
         </div>
-    </div><br />
+    </div>
     <div class="row centered">
         <button class="btn btn-info m-1" @onclick="NuevoJuego">Nuevo juego</button>
     </div>
@@ -63,6 +71,7 @@
 
     private HubConnection _hubConnection;
     private Game _game;
+    private bool _isDisabled;
 
     protected override async Task OnInitializedAsync()
     {
@@ -73,6 +82,12 @@
         _hubConnection.On<Game>(HubMessages.RecibeMensaje, (game) =>
         {
             _game = game;
+            StateHasChanged();
+        });
+
+        _hubConnection.On<bool>(HubMessages.DeshabilitarTablero, (disabled) =>
+        {
+            _isDisabled = disabled;
             StateHasChanged();
         });
 
@@ -110,5 +125,4 @@
 
     Task NuevoJuego() => _hubConnection.SendAsync(HubMessages.NuevoJuego, _game);
     Task TomarTurnoJugador(int i) => _hubConnection.SendAsync(HubMessages.TomarTurnoJugador, i, _game);
-    Task Enviar() => _hubConnection.SendAsync(HubMessages.EnvioMensaje, _game);
 }

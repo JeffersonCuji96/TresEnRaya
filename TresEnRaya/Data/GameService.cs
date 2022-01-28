@@ -14,15 +14,18 @@ namespace TresEnRaya.Data
                 Juego = new string[9],
                 Jugador1Turno = true,
                 Jugador2Turno = false,
-                XGanador=false,
-                OGanador=false,
-                EmpateJuego=false,
-                JuegoFinalizado=false
+                XGanador = false,
+                OGanador = false,
+                EmpateJuego = false,
+                JuegoFinalizado = false,
+                Linea = new bool[9]
             };
 
-            for(var i = 0; i < objGameModel.Juego.Length; i++)
+            for (var i = 0; i < objGameModel.Juego.Length; i++)
+            {
                 objGameModel.Juego[i] = string.Empty;
-
+                objGameModel.Linea[i] = true;
+            }
             return Task.FromResult(objGameModel);
         }
     }

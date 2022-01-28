@@ -60,3 +60,4 @@ C:\Users\renem\source\repos\TresEnRaya\TresEnRaya\obj\Debug\netcoreapp3.1\TresEn
 C:\Users\renem\source\repos\TresEnRaya\TresEnRaya\obj\Debug\netcoreapp3.1\TresEnRaya.pdb
 C:\Users\renem\source\repos\TresEnRaya\TresEnRaya\obj\Debug\netcoreapp3.1\TresEnRaya.genruntimeconfig.cache
 C:\Users\renem\source\repos\TresEnRaya\TresEnRaya\obj\Debug\netcoreapp3.1\TresEnRaya.csprojAssemblyReference.cache
+C:\Users\renem\source\repos\TresEnRaya\TresEnRaya\bin\Debug\netcoreapp3.1\Properties\ServiceDependencies\trenenraya - Web Deploy\profile.arm.json
