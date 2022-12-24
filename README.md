@@ -5,7 +5,7 @@ Proyecto personal realizado con Asp.Net Core SignalR y Blazor. Sistema de juego 
 ## Demostración
 Para ver un tutorial del proyecto visitar en youtube: https://youtu.be/e7LHBQou6pA
 
-Para revisar la demo del proyecto debe ingresar al sitio web: https://tresenraya.azurewebsites.net/
+Para revisar la demo del proyecto debe ingresar al sitio web: https://tresenrayaonline.azurewebsites.net/
     
 ## Vista previa
 
