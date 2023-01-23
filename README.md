@@ -5,7 +5,7 @@ El proyecto está realizado con Asp.Net Core SignalR y Blazor, por lo cual su fu
 ## Demostración
 Para ver un tutorial del proyecto visitar en youtube: https://youtu.be/e7LHBQou6pA
 
-Para revisar la demo del proyecto debe ingresar al sitio web: https://tresenrayaonline.azurewebsites.net/
+Para revisar la demo del proyecto debe ingresar al sitio web: https://tresrayaonline.azurewebsites.net/
     
 ## Vista previa
 
